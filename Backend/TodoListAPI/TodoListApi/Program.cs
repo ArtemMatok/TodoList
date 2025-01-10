@@ -1,5 +1,8 @@
+using FluentValidation.AspNetCore;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using TodoListApi.Infrastructure.Data;
+using TodoListApi.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +17,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+builder.Services.AddValidatorsFromAssemblyContaining<TodoCreateDtoValidator>();
+builder.Services.AddFluentValidationAutoValidation();
+
+builder.Services.AddAutoMapper(typeof(TaskMapper));
+
+builder.Services.AddScoped<ITaskRepository, TaskRepository>();
+builder.Services.AddScoped<ITaskService, TaskService>();
 
 var app = builder.Build();
 
