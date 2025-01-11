@@ -11,7 +11,7 @@ namespace TodoListApi.Application
     public interface ITaskRepository
     {
         Task<PageResultResponse<Todo>> GetTasksAsync(TaskFilter filter);
-        Task<Result<bool>> CreateTaskAsync(Todo todo);
+        Task<Result<Todo>> CreateTaskAsync(Todo todo);
         Task<Result<bool>> DeleteTaskAsync(int todoId);
     }
 }

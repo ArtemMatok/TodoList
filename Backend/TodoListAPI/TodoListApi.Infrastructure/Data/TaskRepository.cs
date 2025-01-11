@@ -12,18 +12,18 @@ namespace TodoListApi.Infrastructure.Data
 {
     public class TaskRepository(ApplicationDbContext _context) : ITaskRepository
     {
-        public async Task<Result<bool>> CreateTaskAsync(Todo todo)
+        public async Task<Result<Todo>> CreateTaskAsync(Todo todo)
         {
             try
             {
                 await _context.Todos.AddAsync(todo);
                 await _context.SaveChangesAsync();
 
-                return Result<bool>.Success(true);
+                return Result<Todo>.Success(todo);
             }
             catch (Exception ex)
             {
-                return Result<bool>.Failure(ex.Message);
+                return Result<Todo>.Failure(ex.Message);
             }
         }
 

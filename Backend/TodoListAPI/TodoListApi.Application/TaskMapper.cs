@@ -14,7 +14,7 @@ namespace TodoListApi.Application
         public TaskMapper()
         {
             CreateMap<Todo, TodoGetDto>();
-            CreateMap<TodoCreateDto, Todo>();
+            CreateMap<TodoCreateDto, Todo>().ReverseMap();
         }
     }
 }
