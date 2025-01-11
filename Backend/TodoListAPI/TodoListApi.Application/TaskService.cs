@@ -13,7 +13,7 @@ namespace TodoListApi.Application
     public interface ITaskService
     {
         Task<PageResultResponse<TodoGetDto>> GetTasksAsync(TaskFilter filter);
-        Task<Result<bool>> CreateTaskAsync(TodoCreateDto todoCreateDto);
+        Task<Result<TodoGetDto>> CreateTaskAsync(TodoCreateDto todoCreateDto);
         Task<Result<bool>> DeleteTaskAsync(int todoId);
     }
     public class TaskService(
@@ -21,11 +21,15 @@ namespace TodoListApi.Application
         IMapper _mapper
     ) : ITaskService
     {
-        public async Task<Result<bool>> CreateTaskAsync(TodoCreateDto todoCreateDto)
+        public async Task<Result<TodoGetDto>> CreateTaskAsync(TodoCreateDto todoCreateDto)
         {
             var todoEntity = _mapper.Map<Todo>(todoCreateDto);
 
-            return await _taskRepository.CreateTaskAsync(todoEntity);
+            var result =  await _taskRepository.CreateTaskAsync(todoEntity);
+            if (!result.IsSuccess) return Result<TodoGetDto>.Failure(result.ErrorMessage);
+            var todoGet = _mapper.Map<TodoGetDto>(todoEntity);
+
+            return Result<TodoGetDto>.Success(todoGet);
         }
 
         public async Task<Result<bool>> DeleteTaskAsync(int todoId)
